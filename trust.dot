@@ -1,0 +1,42 @@
+digraph AD_Trust_Path {
+    rankdir=LR;
+    bgcolor="#FFFFFF";
+    node [shape=box, style=filled, fontname="Segoe UI", fontsize=10, color="#333333", fillcolor="#E6E6E6"];
+
+    // Domain Nodes
+    "task1.local" [fillcolor="#AED6F1"];
+    "child.task1.local" [fillcolor="#D6EAF8"];
+    "task2.local" [fillcolor="#A9DFBF"];
+
+    // Workstations / Hosts
+    "WIN-ATTACKER" [shape=ellipse, fillcolor="#F1948A"];
+    "WIN-TARGET" [shape=ellipse, fillcolor="#F9E79F"];
+
+    // Trust Relationships
+    "task1.local" -> "child.task1.local" [label="Parent-Child Trust", color="#3498DB", fontcolor="#1F618D"];
+    "task1.local" -> "task2.local" [label="External Trust", color="#2ECC71", fontcolor="#196F3D"];
+
+    // RBCD (Resource-Based Constrained Delegation)
+    "WIN-ATTACKER" -> "WIN-TARGET" [label="RBCD Enabled", color="#E67E22", fontcolor="#784212", style=dashed];
+
+    // SIDHistory Abuse
+    "User-A (task2.local)" [shape=ellipse, fillcolor="#D2B4DE"];
+    "Domain Admin (task1.local)" [shape=ellipse, fillcolor="#FADBD8"];
+    "User-A (task2.local)" -> "Domain Admin (task1.local)" [label="SIDHistory Impersonation", color="#C0392B", style=bold];
+
+    // Admin Delegation
+    "Admin-PC" [shape=ellipse, fillcolor="#F5CBA7"];
+    "Domain Admin (task1.local)" -> "Admin-PC" [label="Admin Access", color="#5D6D7E", style=solid];
+
+    // Legend
+    subgraph cluster_legend {
+        label="Legend";
+        style=dashed;
+        fontsize=9;
+        "Parent-Child Trust" [shape=plaintext];
+        "External Trust" [shape=plaintext];
+        "RBCD Enabled" [shape=plaintext];
+        "SIDHistory Impersonation" [shape=plaintext];
+        "Admin Access" [shape=plaintext];
+    }
+}

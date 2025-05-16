@@ -1,0 +1,35 @@
+digraph AD_Exploitable_Paths {
+    rankdir=LR;
+    node [shape=box, style=filled, fontname="Segoe UI", fontsize=10, color="#444", fillcolor="#F4F6F7"];
+
+    // Domains
+    "task1.local" [fillcolor="#D6EAF8"];
+    "task2.local" [fillcolor="#D1F2EB"];
+
+    // Users & Computers
+    "User-A" [shape=ellipse, fillcolor="#FADBD8"];
+    "ServiceAccount@task2.local" [shape=ellipse, fillcolor="#FCF3CF"];
+    "WIN-ATTACKER" [shape=ellipse, fillcolor="#F5B7B1"];
+    "WIN-TARGET" [shape=ellipse, fillcolor="#F9E79F"];
+    "Domain Admin" [shape=ellipse, fillcolor="#D2B4DE"];
+    "Shadow Admin" [shape=ellipse, fillcolor="#D7DBDD"];
+
+    // Exploitable paths
+    "User-A" -> "ServiceAccount@task2.local" [label="Kerberoasting", color="#F39C12", style=dashed];
+    "ServiceAccount@task2.local" -> "WIN-TARGET" [label="RBCD", color="#E67E22", style=dotted];
+    "User-A" -> "Shadow Admin" [label="GenericAll", color="#8E44AD"];
+    "Shadow Admin" -> "Domain Admin" [label="AddMember Rights", color="#5D6D7E"];
+    "Domain Admin" -> "WIN-TARGET" [label="Admin Access", color="#1F618D"];
+    "WIN-ATTACKER" -> "WIN-TARGET" [label="SIDHistory Impersonation", color="#C0392B", style=bold];
+    "task1.local" -> "task2.local" [label="Trust Path", color="#2ECC71"];
+
+    // Legend
+    subgraph cluster_legend {
+        label="Legend";
+        style=dashed;
+        "Kerberoasting" [shape=plaintext];
+        "RBCD" [shape=plaintext];
+        "GenericAll" [shape=plaintext];
+        "SIDHistory Impersonation" [shape=plaintext];
+    }
+}
